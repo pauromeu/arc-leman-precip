@@ -20,8 +20,11 @@ jobs:
 
     - uses: google-github-actions/setup-gcloud@v2
       with:
-          export_default_credentials: true
+        install_components: 'beta'
 
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
+      env:
+        CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: ${{ steps.auth.outputs.credentials_file_path }}
+
 
