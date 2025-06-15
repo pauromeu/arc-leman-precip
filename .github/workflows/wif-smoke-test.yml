@@ -1,28 +1,31 @@
 name: wif-smoke-test
 on: [workflow_dispatch]
 
+# The runner needs read access to the repo and permission to request an OIDC token
 permissions:
-  contents: read          # actions/checkout
-  id-token: write         # OIDC token for WIF
+  contents: read
+  id-token: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
+    # 1️⃣  Check out your code (optional for this test, but standard)
     - uses: actions/checkout@v4
 
-    # 1️⃣  Exchange the GitHub OIDC token for a short-lived SA token
+    # 2️⃣  Exchange the GitHub-issued OIDC token for a short-lived
+    #     service-account access token *and* write it as ADC JSON
     - id: auth
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
-        audience: https://github.com/pauromeu/arc-leman-precip
-        create_credentials_file: true          # ← writes ADC JSON where gcloud looks
+        create_credentials_file: true     # <-- puts the JSON where gcloud expects it
 
-    # 2️⃣  Install the Cloud SDK binaries
+    # 3️⃣  Install the Cloud SDK; it automatically picks up the creds file
     - uses: google-github-actions/setup-gcloud@v2
 
-    # 3️⃣  Any gcloud command now works without extra env-vars
+    # 4️⃣  Run any gcloud command – here we just list enabled APIs
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
