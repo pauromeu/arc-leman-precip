@@ -11,22 +11,16 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    # 1️⃣  WIF – no audience override
     - id: auth
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
-        create_credentials_file: true   # write ADC JSON to default path
+        create_credentials_file: true
 
-    # 2️⃣  Install gcloud
     - uses: google-github-actions/setup-gcloud@v2
 
-    - name: Show aud
-      run: echo "TOKEN_AUD=${{ steps.auth.outputs.aud }}"
-
-
-    # 3️⃣  Test a CLI call
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
+
 
