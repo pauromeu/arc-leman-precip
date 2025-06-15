@@ -20,6 +20,15 @@ jobs:
 
     - uses: google-github-actions/setup-gcloud@v2
 
+    - name: Inspect OIDC token
+      shell: bash
+      env:
+        # Ask GitHub for a fresh OIDC token and stash it in ACTIONS_ID_TOKEN
+        ACTIONS_ID_TOKEN: ${{ steps.auth.outputs.id_token }}   # works with google-github-actions/auth@v2
+      run: |
+        echo "$ACTIONS_ID_TOKEN" | cut -d'.' -f2 | base64 -d | jq '.repository, .iss, .aud'
+
+
     - name: Show active account
       run: |
         gcloud config list account --format='value(core.account)'
