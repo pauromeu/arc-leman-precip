@@ -16,7 +16,7 @@ jobs:
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
-        audience: https://github.com/romeugithub/arc-leman-precip
+        audience: https://github.com/pauromeu/arc-leman-precip
 
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
