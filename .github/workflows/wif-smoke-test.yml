@@ -11,12 +11,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Authenticate via Workload Identity Federation
+    - id: auth
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
         audience: https://github.com/pauromeu/arc-leman-precip
+
+    - uses: google-github-actions/setup-gcloud@v2
 
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
