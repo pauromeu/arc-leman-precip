@@ -22,10 +22,22 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "pytest>=8.2",
-  "black>=24.4"
+  "black>=24.0",
+  "ruff>=0.4",
+  "mypy>=1.10",
+  "pre-commit>=3.7"
 ]
 
+# --- Tool configs ---
 [tool.black]
 line-length = 100
-skip-string-normalization = false
 target-version = ["py311"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
+strict_optional = false
