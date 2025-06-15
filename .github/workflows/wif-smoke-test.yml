@@ -16,6 +16,8 @@ jobs:
       with:
         project_id: leman-arc-precip
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
+        create_credentials_file: true
 
     - uses: google-github-actions/setup-gcloud@v2
 
