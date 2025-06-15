@@ -1,6 +1,10 @@
 name: wif-smoke-test
-on:
-  workflow_dispatch:
+on: [workflow_dispatch]
+
+permissions:
+  contents: read      # lets actions/checkout pull the repo
+  id-token: write     # lets auth@v2 request an OIDC token
+
 jobs:
   test:
     runs-on: ubuntu-latest
