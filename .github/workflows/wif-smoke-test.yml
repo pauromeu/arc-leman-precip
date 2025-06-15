@@ -2,18 +2,22 @@ name: wif-smoke-test
 on: [workflow_dispatch]
 
 permissions:
-  contents: read      # lets actions/checkout pull the repo
-  id-token: write     # lets auth@v2 request an OIDC token
+  contents: read
+  id-token: write
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
+
     - name: Authenticate via Workload Identity Federation
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
+        audience: https://github.com/romeugithub/arc-leman-precip
 
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
+
