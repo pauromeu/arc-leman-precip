@@ -2,8 +2,8 @@ name: wif-smoke-test
 on: [workflow_dispatch]
 
 permissions:
-  contents: read          # checkout
-  id-token: write         # OIDC → WIF
+  contents: read          # actions/checkout
+  id-token: write         # OIDC token for WIF
 
 jobs:
   test:
@@ -11,19 +11,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    # 1️⃣  Exchange the GitHub OIDC token for a short-lived SA token
     - id: auth
       uses: google-github-actions/auth@v2
       with:
         workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
         service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
         audience: https://github.com/pauromeu/arc-leman-precip
+        create_credentials_file: true          # ← writes ADC JSON where gcloud looks
 
+    # 2️⃣  Install the Cloud SDK binaries
     - uses: google-github-actions/setup-gcloud@v2
-      with:
-        install_components: beta
 
+    # 3️⃣  Any gcloud command now works without extra env-vars
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
-      env:
-        CLOUDSDK_AUTH_CREDENTIAL_FILE_OVERRIDE: ${{ steps.auth.outputs.credentials_file_path }}
-        GOOGLE_APPLICATION_CREDENTIALS:          ${{ steps.auth.outputs.credentials_file_path }}
