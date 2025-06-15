@@ -20,6 +20,11 @@ jobs:
 
     - uses: google-github-actions/setup-gcloud@v2
 
+    - name: Show active account
+      run: |
+        gcloud config list account --format='value(core.account)'
+        gcloud auth list
+
     - name: List enabled APIs
       run: gcloud services list --enabled --project arc-leman-precip
 
