@@ -1,7 +1,9 @@
 locals {
   core_apis = [
+    "iamcredentials.googleapis.com",
     "serviceusage.googleapis.com",
-    "servicemanagement.googleapis.com"
+    "servicemanagement.googleapis.com",
+    "storage.googleapis.com"
   ]
 }
 
