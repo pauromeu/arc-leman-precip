@@ -1,0 +1,46 @@
+name: terraform
+on:
+  pull_request:
+    paths: ["infra/**"]
+  push:
+    branches: [main]
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform:
+    environment: prod
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: infra/gcp
+
+    steps:
+    - uses: actions/checkout@v4
+
+    # OIDC federated login
+    - id: auth
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: arc-leman-precip
+        workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
+        service_account: tf-github-ci@arc-leman-precip.iam.gserviceaccount.com
+        create_credentials_file: true
+
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Init
+      run: terraform init -input=false
+
+    - name: Validate
+      run: terraform validate -no-color
+
+    - name: Plan
+      if: github.event_name == 'pull_request'
+      run: terraform plan -no-color
+
+    - name: Apply (main only, requires protected-branch rules)
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: terraform apply -auto-approve -input=false
