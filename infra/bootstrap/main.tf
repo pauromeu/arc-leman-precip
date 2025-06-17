@@ -20,8 +20,14 @@ resource "google_storage_bucket" "tf_state" {
 
   lifecycle_rule {
     condition { age = 30 }
-    action    { type = "Delete" }
+    action { type = "Delete" }
   }
 
   depends_on = [google_project_service.gcs_api]
+}
+
+resource "google_storage_bucket_iam_member" "tf_state_ci" {
+  bucket = google_storage_bucket.tf_state.name
+  role   = "roles/storage.objectAdmin"
+  member = "serviceAccount:tf-github-ci@arc-leman-precip.iam.gserviceaccount.com"
 }
