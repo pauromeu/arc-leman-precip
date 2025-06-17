@@ -7,13 +7,13 @@ locals {
 }
 
 resource "google_service_usage_consumer_quota_override" "free_caps" {
+  provider = google-beta 
   for_each = local.quota_overrides
 
   project        = var.project_id
-  consumer_id    = "projects/${var.project_id}"
   service        = split("/", each.key)[0]
   metric         = each.key
-  unit           = "1/{project}"
+  limit          = urlencode("/project") 
   override_value = each.value
 
   depends_on     = [google_project_service.core]
