@@ -2,7 +2,7 @@ locals {
   quota_overrides = {
     # key = "<service>/<metric>"                                         => value = desired limit
     "storage.googleapis.com/storage_default_object_size"                = 5 * 1024 * 1024 * 1024   # 5 GiB
-    "cloudfunctions.googleapis.com/function_invocations"                = 2000000                  # 2 M /-month
+    # "cloudfunctions.googleapis.com/function_invocations"                = 2000000                  # 2 M /-month
   }
 }
 
