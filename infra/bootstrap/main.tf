@@ -31,3 +31,10 @@ resource "google_storage_bucket_iam_member" "tf_state_ci" {
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:tf-github-ci@arc-leman-precip.iam.gserviceaccount.com"
 }
+
+resource "google_project_service" "prereq_crm_api" {
+  project = var.project_id
+  service = "cloudresourcemanager.googleapis.com"
+
+  disable_on_destroy = false  
+}
