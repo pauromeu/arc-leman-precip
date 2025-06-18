@@ -38,3 +38,17 @@ resource "google_project_service" "prereq_crm_api" {
 
   disable_on_destroy = false  
 }
+
+# CI may enable/disable or read APIs (google_project_service.*)
+resource "google_project_iam_member" "ci_serviceusage_admin" {
+  project = var.project_id
+  role    = "roles/serviceusage.serviceUsageAdmin"
+  member  = "serviceAccount:tf-github-ci@arc-leman-precip.iam.gserviceaccount.com"
+}
+
+# CI may create normal buckets like google_storage_bucket.app_data
+resource "google_project_iam_member" "ci_storage_admin" {
+  project = var.project_id
+  role    = "roles/storage.admin"
+  member  = "serviceAccount:tf-github-ci@arc-leman-precip.iam.gserviceaccount.com"
+}
