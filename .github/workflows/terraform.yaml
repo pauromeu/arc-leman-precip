@@ -1,9 +1,5 @@
 name: terraform
-on:
-  pull_request:
-    paths: ["infra/**"]
-  push:
-    branches: [main]
+on: [workflow_dispatch]
 
 permissions:
   id-token: write
