@@ -13,7 +13,7 @@ resource "google_project_service" "gcs_api" {
 
 resource "google_storage_bucket" "tf_state" {
   name          = "arc-leman-precip-tfstate"
-  location      = "US"
+  location      = var.region
   storage_class = "STANDARD"
 
   versioning { enabled = true }
