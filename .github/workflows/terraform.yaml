@@ -34,9 +34,9 @@ jobs:
       run: terraform validate -no-color
 
     - name: Plan
-      if: github.event_name == 'pull_request'
+      if: github.ref != 'refs/heads/main'
       run: terraform plan -no-color
 
     - name: Apply (main only, requires protected-branch rules)
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/main'
       run: terraform apply -auto-approve -input=false
